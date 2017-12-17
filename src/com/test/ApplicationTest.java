@@ -4,11 +4,9 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.UUID;
 
-import org.hibernate.Session;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import com.wcl.entity.Application;
-import com.wcl.entity.Menu;
 import com.wcl.service.ApplicationService;
 
 public class ApplicationTest {
