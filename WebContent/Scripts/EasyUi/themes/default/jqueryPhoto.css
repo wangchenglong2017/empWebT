@@ -1,0 +1,26 @@
+﻿@charset "utf-8";
+/* CSS Document */
+/* 效果CSS开始 */
+.mod18{width:360px;position:relative;margin:0 auto; text-align:left;}
+.mod18 .btn{position:absolute;cursor:pointer;z-index:99;font-size:50px;font-weight:bold;}
+.mod18 .prev{left:0px;background:url(images/photo/prevBtnTop.png) no-repeat;}
+.mod18 #prevTop,.mod18 #nextTop{top:130px;width:32px;height:48px;}
+.mod18 #prev,.mod18 #next{top:320px;width:10px;height:45px;}
+.mod18 #prevTop{background:url(images/photo/prevBtnTop.png) 0 0 no-repeat;}
+.mod18 #nextTop{background:url(images/photo/nextBtnTop.png) 0 0 no-repeat;}
+.mod18 .next{right:0px;background:url(images/photo/nextBtn.jpg) no-repeat;}
+.mod18 li{float:left;}
+.mod18 .cf li{position:relative;color:#fff;}
+.mod18 .cf a{display:block;width:526px;height:377px;position:absolute;color:#fff;}
+.mod18 .picBox{width:360px; height:300px;position:relative;overflow:hidden;}
+.mod18 .picBox ul{height:300px;position:absolute; left:0;}
+.mod18 .picBox li{ padding-right:1px; width:360px;height:300px;}
+.mod18 .picBox li img{ width:360px;}
+.mod18 .listBox{width:340px;height:80px;margin:0 auto;position:relative;overflow:hidden;}
+.mod18 .listBox ul{height:80px;position:absolute; padding-left:7px;}
+.mod18 .listBox li{width:83px;height:75px;cursor:pointer;position:relative; padding:5px 0 0 0;}
+.mod18 .listBox li i{display:none;}
+.mod18 .listBox img{border:2px solid #fff; width:71px;}
+.mod18 .listBox .on img{border:2px solid #FF8000;}
+/*.mod18 .listBox .on{background:url(../images/img_bg.jpg) center top no-repeat;}*/
+.mod18 .listBox .on i{display:block;}

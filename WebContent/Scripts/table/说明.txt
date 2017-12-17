@@ -1,0 +1,7 @@
+//自定义类，给定值；
+                    $("#tblItemList").alterBgColor({
+                        odd: "odd1", //偶数行样式
+                        even: "even1",//奇数行样式
+                        selected: "mselected",//当前选中行
+                        callback: SetRowJson, //单击回调函数
+                    }).find("th").css("font-size", "18");

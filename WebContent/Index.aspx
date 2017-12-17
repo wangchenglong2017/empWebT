@@ -1,0 +1,866 @@
+﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="Index.aspx.cs" Inherits="HH.Employee.WebUI.Index" %>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>人员模型</title>
+    <link href="/Scripts/Iconfont/iconfont.css" rel="stylesheet" type="text/css" />
+    <link href="Scripts/EasyUi/themes/default/style.css" rel="stylesheet" type="text/css" />
+    <link href="Scripts/EasyUi/themes/default/easyui.css" rel="stylesheet" type="text/css" />
+    <link href="/Scripts/EasyUi/themes/icon.css" rel="stylesheet" type="text/css" />
+    <script src="Scripts/jquery-1.5.1.min.js" type="text/javascript"></script>
+    <script src="Scripts/EasyUi/jquery.easyui.min.js" type="text/javascript"></script>
+    <script src="Scripts/Common.js" type="text/javascript"></script>
+    <link href="CSS/index.css" rel="stylesheet" />
+    <script type="text/javascript">
+
+        //获得cookie信息
+        var userName = em_userName;
+        var flag = em_flag;
+        var appCode = em_appcode;
+
+        //设置下拉菜单
+        function setdownArrow() {
+            //$(".downArrow").offset().left = $(".tabs li:last").offset().left;
+            var title = $(".tabs li:last a  span:eq(0)").text();
+            //初始化只有首页加了刷新图标首页下拉框变形处理
+            if (title == "Home") {
+                var lilfet = $(".tabs li:last").offset().left + 1;
+                var liwidth = $(".tabs li:last").width();
+                $(".downArrow").css("left", (lilfet + liwidth + 8) + "px");
+            }
+            else {
+                //打开企业tab若向右滚动未出现
+                var lilfet = $(".tabs li:last").offset().left + 1;
+                var liwidth = $(".tabs li:last").width();
+                var attr = $("#tabs").children(".tabs-header-noborder").children(".tabs-scroller-right").attr("style"); //IE下显示DISPLAY:none 其它显示display: none;
+                if (attr == "display: none;" || attr == "DISPLAY: none") {
+                    $(".downArrow").css("left", (lilfet + liwidth) + "px");
+                }
+                else {
+                    //若向右滚动出现则为了使得下拉隐藏则设置下拉在向右滚动左边一直出现
+                    var divleft = $("#tabs").children(".tabs-header-noborder").children(".tabs-scroller-right").offset().left + 1;
+                    var divwidth = $(".downArrow").width();
+                    $(".downArrow").css("left", (divleft - divwidth) + "px");
+                }
+            }
+            //获得应用列表
+            GetAppList();
+
+            //选择系统应用
+            $("#txtSuper,#aSuper").unbind("click").bind("click", function () {
+                $("#ddSuper p").bind("click", function () {
+                    $("#txtSuper").val($(this).text());
+                    $("#txtSuper").attr("title", $(this).attr("title"));
+                    $("#ddSuper").hide();
+                });
+                $("#ddSuper").toggle(200);
+            });
+
+            //获得顶级菜单
+            GetMenu();
+        }
+
+        function ShowMsg(msg) {
+            $(".errorInfo").text(msg);
+            //$(".errorInfo").fadeIn(100);
+            //$(".errorInfo").fadeOut(6000);
+            $(".errorInfo").show().delay(3000).fadeOut(200);
+        }
+
+        function ShowMsgPanel(msg) {
+            $.messager.show({
+                tilte: "系统消息",
+                msg: msg,
+                showType: "show",
+                style: {
+                    right: "",
+                    top: document.body.scrollTop + document.documentElement.scrollTop,
+                    bottom: "",
+                    closable: true
+                }
+            });
+        }
+
+        function AlertMsg(msg) {
+            /*  $.messager.alert({
+                  tilte: "系统消息",
+                  msg: msg,
+                  icos:"error"
+              });*/
+            $.messager.alert("系统消息", msg, "eror");
+        }
+
+        function addTab(title, url) {
+
+            if ($('#tabs').tabs('exists', title)) {
+                $('#tabs').tabs('select', title); //选中并刷新
+                var currTab = $('#tabs').tabs('getSelected');
+                var url = $(currTab.panel('options').content).attr('src');
+                if (url != undefined && currTab.panel('options').title != '首页') {
+
+                    $("#divLoading").show();
+                    $('#tabs').tabs('update', {
+                        tab: currTab,
+                        options: {
+                            content: createFrame(url)
+                        }
+                    })
+                }
+            }
+            else {
+                var content = createFrame(url);
+                $('#tabs').tabs('add', {
+                    title: title,
+                    content: content,
+                    closable: true
+                });
+            }
+            tabClose();
+            if (title != '首页') {
+                setdownArrow();
+            }
+        }
+        //设置选中tab
+        function SelectTable(title, url, topTitle) {
+            if ($('#tabs').tabs('exists', title)) {
+                var currTab = $('#tabs').tabs('select', title);
+            } else {
+                addTab1(title, url, $("div[topname='" + topTitle + "']").attr("topvalue"));
+            }
+        }
+        //增加新的TAB
+        function addTab1(title, url, argId) {
+            var varClosable = true;
+            if (title == "首页") {
+                varClosable = false;
+                setdownArrow();
+            }
+            $("#divLoading").show();
+            $(".parentMenu").removeClass("menuS");
+            $("#parent" + argId).addClass("menuS");
+            $("#hidCurTopMenuId").val(argId);
+
+            if ($('#tabs').tabs('exists', title)) {
+                $('#tabs').tabs('select', title); //选中并刷新
+                var currTab = $('#tabs').tabs('getSelected');
+                var urlOld = $(currTab.panel('options').content).attr('src');
+                if (urlOld != undefined && currTab.panel('options').title != '首页') {
+
+                    $("#divLoading").show();
+                    $('#tabs').tabs('update', {
+                        tab: currTab,
+                        options: {
+                            content: createFrame(url)
+                        }
+
+                    })
+                }
+            } else {
+                var content = createFrame(url);
+                $('#tabs').tabs('add', {
+                    title: title,
+                    content: content,
+                    closable: varClosable,
+                    id: argId,
+                    iconCls: "icon-reload"
+                });
+            }
+            tabClose();
+            if (title != '首页') {
+                setdownArrow();
+            }
+        }
+        function childAddTab(title, url, topTitle) {
+            addTab1(title, url, $("div[topname='" + topTitle + "']").attr("topvalue"));
+        }
+        function createFrame(url) {
+            var s = '<iframe scrolling="auto" frameborder="0"  src="' + url + '" style="width:100%;height:99%;"></iframe>';
+            return s;
+        }
+
+        function CloseTab() {
+            parent.$.messager.confirm('系统提示', '提示：确定要关闭当前页面吗？', function (r) {
+                if (r) {
+                    var currTab = $('#tabs').tabs('getSelected');
+                    $('#tabs').tabs('close', currTab.panel('options').title);
+                    setdownArrow();
+                }
+            });
+        }
+
+        function CloseTabNotConfirm() {
+            var currTab = $('#tabs').tabs('getSelected');
+            $('#tabs').tabs('close', currTab.panel('options').title);
+            setdownArrow();
+        }
+
+        function CloseTabByTitle(title) {
+            $('#tabs').tabs('close', title);
+            setdownArrow();
+        }
+        function childAddTabAndCloseTab(title, url, topTitle, closeTitle) {
+            $('#tabs').tabs('close', closeTitle);
+            addTab1(title, url, $("div[topname='" + topTitle + "']").attr("topvalue"));
+        }
+        function tabCloseFun(obj) {
+            var subtitle = $(obj).parent().children(".tabs-inner").children(".tabs-title").text();
+            return;
+        }
+        function tabClose() {
+            /*单击TAB选项卡*/
+            //$(".tabs-inner").click(function () {
+            $(".tabs-closable").click(function () {
+                //var subtitle = $(this).children(".tabs-closable").text();
+                var subtitle = $(this).text();
+                $(".parentMenu").removeClass("menuS");
+                if (subtitle != null && subtitle != '') {
+                    var tab = $('#tabs').tabs('getTab', subtitle);
+                    $("#parent" + tab.panel('options').id).addClass("menuS");
+                    $("#hidCurTopMenuId").val(tab.panel('options').id);
+                }
+            })
+
+            /*单击TAB前刷新图标页面刷新*/
+            $(".icon-reload").click(function () {
+                var subtitle = $(this).parent(".tabs-inner").text();
+                if (subtitle != null && subtitle != '') {
+                    var tab = $('#tabs').tabs('getTab', subtitle);
+                    var url = $(tab.panel('options').content).attr('src');
+                    $('#tabs').tabs('update', {
+                        tab: tab,
+                        options: {
+                            content: createFrame(url)
+                        }
+                    })
+
+                    /*刷新后单击关闭不起作用则在刷新后重新调用关闭函数*/
+                    $(".tabs-close").click(function () {
+                        var subtitle = $(this).parent().children(".tabs-inner").children(".tabs-closable").text();
+                        $('#tabs').tabs('close', subtitle);
+                        setdownArrow();
+                    })
+                }
+            })
+
+            /*关闭TAB选项卡*/
+            $(".tabs-close").click(function () {
+                var subtitle = $(this).parent().children(".tabs-inner").children(".tabs-closable").text();
+                $('#tabs').tabs('close', subtitle);
+                setdownArrow();
+            })
+            /*双击关闭TAB选项卡*/
+            $(".tabs-inner").dblclick(function () {
+                var subtitle = $(this).children(".tabs-closable").text();
+                $('#tabs').tabs('close', subtitle);
+                setdownArrow();
+            })
+        }
+        //刷新首页
+        function UpdateTabFirst() {
+            var firstTab = $('#tabs').tabs('getTab', '首页');
+            var url = $(firstTab.panel('options').content).attr('src');
+            var content = '<iframe scrolling="auto" frameborder="0"  src="' + url + '" style="width:100%;height:100%;"></iframe>';
+            if (url != undefined) {
+                $('#tabs').tabs('update', {
+                    tab: firstTab,
+                    options: {
+                        content: content
+                    }
+                });
+
+                var ieset = navigator.userAgent;
+                if (ieset.indexOf("MSIE 6.0") > -1 || ieset.indexOf("Chrome") > -1) {
+                    var currTab1 = $('#tabs').tabs('getTab', '首页');
+                    setTimeout(function () { refreshTab(currTab1) }, 0);
+                }
+            }
+        }
+        function refreshTab(refresh_tab) {
+            if (refresh_tab && refresh_tab.find('iframe').length > 0) {
+                var _refresh_ifram = refresh_tab.find('iframe')[0];
+                var refresh_url = _refresh_ifram.src;
+                _refresh_ifram.contentWindow.location.href = refresh_url;
+            }
+        }
+        //绑定菜单事件
+        function tabCloseEven() {
+            //刷新
+            $('#mm-tabupdate').click(function () {
+                var currTab = $('#tabs').tabs('getSelected');
+                var url = $(currTab.panel('options').content).attr('src');
+                if (url != undefined) {
+
+                    $("#divLoading").show();
+                    $('#tabs').tabs('update', {
+                        tab: currTab,
+                        options: {
+                            content: createFrame(url)
+                        }
+                    })
+                    /*刷新后单击关闭不起作用则在刷新后重新调用关闭函数*/
+                    $(".tabs-close").click(function () {
+                        var subtitle = $(this).parent().children(".tabs-inner").children(".tabs-closable").text();
+                        $('#tabs').tabs('close', subtitle);
+                        setdownArrow();
+                    })
+                }
+            })
+            //关闭当前
+            $('#mm-tabclose').click(function () {
+                var currtab_title = $('#mm').data("currtab");
+                $('#tabs').tabs('close', currtab_title);
+                setdownArrow();
+            })
+            //全部关闭
+            $('#mm-tabcloseall').click(function () {
+                $('.tabs-inner span').each(function (i, n) {
+                    var t = $(n).text();
+                    if (t != '首页') {
+                        $('#tabs').tabs('close', t);
+                    }
+                });
+                setdownArrow();
+            });
+            //关闭除当前之外的TAB
+            $('#mm-tabcloseother').click(function () {
+                var prevall = $('.tabs-selected').prevAll();
+                var nextall = $('.tabs-selected').nextAll();
+                if (prevall.length > 0) {
+                    prevall.each(function (i, n) {
+                        var t = $('a:eq(0) span', $(n)).text();
+                        if (t != '首页') {
+                            $('#tabs').tabs('close', t);
+                        }
+                    });
+                }
+                if (nextall.length > 0) {
+                    nextall.each(function (i, n) {
+                        var t = $('a:eq(0) span', $(n)).text();
+                        if (t != '首页') {
+                            $('#tabs').tabs('close', t);
+                        }
+                    });
+                }
+                setdownArrow();
+                return false;
+            });
+            //关闭当前右侧的TAB
+            $('#mm-tabcloseright').click(function () {
+                var nextall = $('.tabs-selected').nextAll();
+                if (nextall.length == 0) {
+                    //msgShow('系统提示','后边没有啦~~','error');
+                    alert('后边没有啦~~');
+                    return false;
+                }
+                nextall.each(function (i, n) {
+                    var t = $('a:eq(0) span', $(n)).text();
+                    $('#tabs').tabs('close', t);
+                });
+                return false;
+            });
+            //关闭当前左侧的TAB
+            $('#mm-tabcloseleft').click(function () {
+                var prevall = $('.tabs-selected').prevAll();
+                if (prevall.length == 0) {
+                    alert('到头了，前边没有啦~~');
+                    return false;
+                }
+                prevall.each(function (i, n) {
+                    var t = $('a:eq(0) span', $(n)).text();
+                    $('#tabs').tabs('close', t);
+                });
+                return false;
+            });
+
+            //退出
+            $("#mm-exit").click(function () {
+                $('#mm').menu('hide');
+            })
+        }
+        $(function () {
+            //设置菜单左右收缩默认值
+            $("#MenuOperate").val("1");
+            //设置顶部收缩默认值
+            $("#MenuUp").val("1");
+            //禁用左侧菜单区域拖动
+            $('body').layout('panel', 'west').panel('panel').resizable('disable'); //参照http://www.easyui.info/archives/270.html 
+            eval("");
+            document.onkeydown = function (e) {
+                var ev = document.all ? window.event : e;
+                if (ev.keyCode == 13) {
+                    if ($(document.activeElement).parent().parent().parent().find('.button').first()) {
+                        $(document.activeElement).parent().parent().parent().find('.button').first().click();
+                    } else if (typeof ($("#tabs .panel:visible iframe")[0]) != 'undefined' && $("#tabs .panel:visible iframe")[0].contentWindow.$('.blueButton').first().html() != null) {
+                        $("#tabs .panel:visible iframe")[0].contentWindow.$('.blueButton').first().click();
+                    }
+                }
+            }
+            tabCloseEven();
+            $(".parentMenu").mouseenter(function () {
+                OpenSecondMenu($(this).attr("id").replace("parent", ""));
+            });
+            $(".parentMenu").mouseleave(function () {
+                TopMenuMouseOut();
+            });
+            $(".memberInfo").mouseenter(function () {
+                $(".MImore").fadeIn(250);
+            });
+            $(".memberInfo").mouseleave(function () {
+                $(".MImore").fadeOut(250);
+            });
+
+            //ConstraintActive();
+            //打开首页
+            childAddTab('首页', 'none.html', '');
+            //关闭默认tab
+            $('.tabs-inner span').each(function (i, n) {
+                var t = $(n).text();
+                if (t != '首页') {
+                    $('#tabs').tabs('close', t);
+                }
+            });
+
+        });
+
+        //打开二级菜单
+        function OpenSecondMenu(arg) {
+            $(".parentMenu").removeClass("menuS");
+            $("#parent" + arg).addClass("menuS");
+        }
+        //点击菜单打开窗口
+        function OpenWindow(obj) {
+            var sobState = "1";
+            var $this = $(obj);
+            var href = $this.attr('src');
+            if (sobState == "2" && href.indexOf("Add") >= 0) {
+                ShowMsg("该账号已封账，不能操作！");
+            }
+            else {
+                var title = $this.text();
+                addTab1(title, href, $this.attr('index'));
+                $('.secondFloat').hide();
+            }
+        }
+        //鼠标移出一级菜单时关闭二级菜单
+        function TopMenuMouseOut() {
+            $(".parentMenu").removeClass("menuS");
+            $("#parent" + $("#hidCurTopMenuId").val()).addClass("menuS");
+            $('.secondFloat').hide();
+        }
+
+        //修改密码
+        function userPwd() {
+
+            var Title = "修改密码";
+            //显示进度条 
+            $("#divLoading").show();
+            $('#openFrameDiv').dialog({
+                title: Title,
+                width: 300,
+                height: 220,
+                closed: true,
+                cache: false,
+                modal: true,
+                maximizable: true,
+                resizable: true,
+                onClose: function () {
+                    parent.$('#openIframe')[0].src = "none.html";
+                },
+                buttons: null
+            });
+
+            $('#openIframe')[0].src = "/UI/PwdEdit.aspx";
+            $('#openFrameDiv').dialog('open');
+
+            //$('#win').dialog({
+            //    title: '修改密码',
+            //    width: 300,
+            //    height: 220,
+            //    closed: false,
+            //    closable: true,
+            //    modal: true,
+            //    cache: false,
+            //    modal: true,
+            //    maximizable: true,
+            //    resizable: true,
+            //    onClose: function () {
+            //        parent.$('#openIframe')[0].src = "none.html";
+            //    },
+            //    buttons: null
+            //});
+            //$('#openIframe')[0].src = "/UI/PwdEdit.aspx";
+            //$('#openFrameDiv').dialog('open');
+
+        }
+
+        //退出登录  删除cookie
+        function loginTetrun() {
+            alert("登录已失效，请重新登录！");
+            window.location.href = '/AdminUI/SessionTimeOut.aspx';
+        }
+
+        //退出
+        function signOut() {
+            $.messager.confirm('系统提示', "确定要退出系统吗？", function (r) {
+                if (r) {
+                    ClearLogin("hand");
+                }
+            });
+        }
+
+        window.onbeforeunload = function () {
+            //var ajaxUrl = "/UI/AjaxPage/Account.ashx";
+            //var ajaxData = "Action=Test";
+            //var msg = AjaxManagers(ajaxData, ajaxUrl);
+            //ClearLogin("sys");
+        };
+
+        //退出系统 清空cookie和redis
+        function ClearLogin(endType) {
+            //var ajaxUrl = webapi + "/api/Account/CloseApp";
+            //var ajaxData = { "appCode": appCode, "userName": userName, "flag": flag };
+            var ajaxUrl = "/UI/AjaxPage/Account.ashx";
+            var ajaxData = "Action=CloseApp&appCode=" + appCode + "&userName=" + userName + "&flag=" + flag + "&endType=" + endType;
+            var msg = AjaxManagers(ajaxData, ajaxUrl);
+            if (msg != "") {
+                //if (endType == "sys") {
+                //    alert("删除了cookie");
+                //    //删除cookie
+                //    DelCookie("EmplyeeUserName");
+                //    DelCookie("EmplyeeUserFlag");
+                //    DelCookie("AppCode");
+                //}
+                window.location.href = "Login.html";
+            }
+        }
+
+        //单击顶级菜单获得子级菜单
+        function GetSubMenu(obj) {
+            var title = "导航列表";
+            //获得菜单ID
+            var MenuId = $(obj).attr("id");
+            //获得属性
+            var index = $(obj).attr("index");
+            //获得菜单名称
+            var menuName = $(obj).attr("name");
+            //获得链接地址
+            var href = "IndexMenu.aspx?MenuID=" + MenuId + "&MenuName=" + escape(menuName);
+            addTab1(title, href, index);
+        }
+
+        //获得菜单信息(只获取顶级菜单)
+        function GetMenu() {
+
+            //var ajaxUrl = webapi + "/api/Menu/GetMenuByUser";
+            //var ajaxData = { "userName": userName, "appCode": appCode, "parentCode": "-1" };
+            var ajaxUrl = "/UI/AjaxPage/Account.ashx";
+            var ajaxData = "Action=GetMenuByUser&userName=" + userName + "&appCode=" + appCode + "&parentCode=-1";
+
+            var msg = AjaxManagers(ajaxData, ajaxUrl);
+
+            if (msg != null && msg != "") {
+                var data = (new Function("", "return " + msg))();
+                //获得成功
+                if (data.Code == "0") {
+                    var html = "";
+                    $("#div_menulist>ul").empty();
+                    var menuList = data.UserMenuList;
+                    for (var i = 0; i < menuList.length; i++) {
+                        var icon = "&" + $.trim(menuList[i].iconSkin);
+
+                        html += "<li class='parentMenu' id='parent8'>";
+                        html += "<a onclick=\"GetSubMenu(this);return false;\" id='" + menuList[i].id + "' index='" + i + "' name='" + menuList[i].name + "' style='cursor: pointer'>";
+                        html += "<div class='cover'></div><div class='icon iconfont' style='color:#fff;text-align:center;font-size:35px'>" + icon + "</div>";
+                        html += "<div class='newFunction' style='display: none;' index='tfun2'></div>";
+                        html += "<div class='text' topname='" + menuList[i].name + "' topvalue='8'>" + menuList[i].name + "</div>";
+                        html += " </a> </li>";
+                    }
+                    $("#div_menulist>ul").append(html);
+                }
+            }
+        }
+
+        //获得应用列表
+        function GetAppList() {
+            var ajaxUrl = "/UI/AjaxPage/AppManager.ashx";
+            var ajaxData = "Action=GetAppListByUser&userName=" + userName;
+            var msg = AjaxManagers(ajaxData, ajaxUrl);
+            if (msg != "") {
+                var data = (new Function("", "return " + msg))().LIST;
+                var html = "";
+                for (var i = 0; i < data.length; i++) {
+                    if (appCode != data[i].CN_S_APPCODE) {
+                        html += "<p id='" + data[i].CN_S_APPCODE + "' onclick='appLocatioin(this)' url='" + data[i].CN_S_URL + "'>" + data[i].CN_S_APPNAME + "</p>";
+                    }
+                    else {
+                        $("#logoNameDiv").text(data[i].CN_S_APPNAME);
+                    }
+                }
+
+                $("#ddSuper").html(html);
+            }
+        }
+
+        //系统跳转
+        function appLocatioin(obj) {
+            //需要跳转的URL
+            var url = $(obj).attr("url");
+            //跳转后的应用ID
+            var afterAppCode = $(obj).attr("id");
+
+            var ajaxUrl = "/UI/AjaxPage/Account.ashx";
+            var ajaxData = "Action=ChangeApp&userName=" + userName + "&old_flag=" + flag + "&front_appCode=" + appCode + "&after_appCode=" + afterAppCode;
+            var msg = AjaxManagers(ajaxData, ajaxUrl);
+            if (msg != "") {
+                var data = (new Function("", "return " + msg))();
+                if (data.Success == "true" || data.Success == true) {
+                    //删除flag的cookie
+                    //DelCookie(em_userName);
+                    //DelCookie(em_appcode);
+                    //DelCookie(em_flag);
+                    //SetCookie("EmplyeeUserFlag", data.FrontFlag);
+                    //flag = GetCookie("EmplyeeUserFlag");
+                    window.location.href = url + "?userName=" + userName + "&flag=" + data.AfterFlag + "&appCode=" + afterAppCode;
+                    //window.open(url + "?userName=" + userName + "&flag=" + data.AfterFlag + "&appCode=" + afterAppCode);
+                }
+                else {
+                    ShowMsg(data.Msg);
+                }
+            }
+        }
+
+    </script>
+
+</head>
+<body class="easyui-layout" ondragstart="return false">
+    <form method="post" action="./index.aspx" id="frmIndex">
+
+        <input type="hidden" id="hidout" value="0" />
+        <input type="hidden" id="MenuOperate" value="1" />
+        <input type="hidden" id="MenuUp" value="1" />
+
+        <div class="errorInfo"></div>
+        <div id="openFrameDiv" class="easyui-window" closed="true" modal="true" title="标题" style="overflow: hidden;">
+            <iframe scrolling="auto" id='openIframe' frameborder="0" src="none.html" style="width: 100%; height: 100%; background-color: #F5F5F5"></iframe>
+        </div>
+        <div id="openActiveDiv" class="easyui-window" closed="true" modal="true" title="标题" style="overflow: hidden;">
+            <iframe scrolling="auto" id='openActiveIframe' frameborder="0" src="none.html" style="width: 100%; height: 100%; background-color: #e6e6e8"></iframe>
+        </div>
+
+        <div class="loading" id="divLoading"></div>
+        <div id="black_overlay" style="display: none;"></div>
+        <div style="display: none;" id="load_content">
+            <div style="float: left; padding-left: 5px;">
+                <img src="../Images/loading.gif" />
+            </div>
+            <div style="float: left; padding-top: 8px;" id="load_contents">数据加载中，请稍后...</div>
+        </div>
+        <div id="win"></div>
+        <input type="hidden" value="" id="hidCurTopMenuId" />
+        <!--主框架top信息 开始-->
+        <div region="north" border="true" class="cs-north" id="NorthRegion">
+            <div class="header" id="headerID">
+                <div class="lineOne" id="lineOneID">
+                    <div class="logo" id="logoID"></div>
+                    <div class="downArrow" id="downArrowID">
+                        <div class="downArrowIcon"></div>
+                        <div class="downArrowContent">
+                            <span id="mm-tabupdate">刷新当前页</span>
+                            <span id="mm-tabcloseall">关闭全部</span>
+                            <span id="mm-tabcloseother">关闭其他</span>
+                            <span id="HiddenHeader" onclick="HiddenHeader();">隐藏头部</span>
+                            <span id="HiddenLeftMenu" onclick="HiddenLeftMenu();">隐藏菜单</span>
+                        </div>
+                    </div>
+
+                    <div class="logoName" id="logoNameDiv">
+                    </div>
+                    <div class="info" id="infoID">
+                        <div class="system">
+                            <div>系统切换：</div>
+
+                            <div style="position: relative; z-index: 2; padding: 0; margin: 8px 0 0 0;">
+                                <span class="active" style="width: 120px; margin: 0;">
+                                    <input id="txtSuper" class="inputText" type="text" value="请选择" readonly="readonly" style="width: 90px; cursor: pointer;" />
+                                    <a id="aSuper" class="trigger"></a></span>
+                                <div id="ddSuper" class="dropList" style="width: 120px; top: 30px; display: none; z-index: 4; overflow-y: auto; max-height: 200px">
+                                </div>
+                            </div>
+                            <%--<a href="#">
+                                <div class="text" >加密管理</div>
+                                <div class="arrow">
+                                    <img src="/images/arrow.png" width="8" height="6" />
+                                </div>
+                            </a>
+                            <ul class="MImore" style="top:10px; right:0; text-align:center; display: none;">
+                                <li>
+                                    <a style="cursor: pointer" onclick="signOut()">
+                                        安全退出
+                                    </a>
+                                </li>
+                            </ul>--%>
+                        </div>
+                        <div class="shopInfo">
+                            <div class="text">
+
+                                <div class="user"><a style="cursor: pointer">&nbsp;&nbsp;&nbsp;</a></div>
+                                <div>
+                                    <div>
+                                        <asp:Literal runat="server" ID="lblRealName"></asp:Literal>&nbsp;&nbsp;&nbsp;&nbsp;
+                                    </div>
+                                    <div>
+                                        <asp:Literal runat="server" ID="lblOrgName"></asp:Literal>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- text -->
+                        </div>
+                        <!-- shopInfo -->
+
+
+                        <!-- newMember -->
+                        <div class="memberInfo">
+                            <div>|&nbsp;&nbsp;</div>
+                            <a style="cursor: pointer">
+                                <div class="icon">
+                                </div>
+                                <div class="text" title="管理员">
+                                    <div style="min-width: 30px; text-align: center;">
+                                        <asp:Literal runat="server" ID="lblLogin"></asp:Literal>
+                                    </div>
+                                </div>
+                                <div class="arrow"></div>
+                            </a>
+                            <ul class="MImore" style="display: none;">
+                                <li class="changePassword">
+                                    <a style="cursor: pointer" onclick="userPwd()">
+                                        <span class="icon1"></span><span class="text">修改密码</span>
+                                    </a>
+                                </li>
+                                <li class="exit">
+                                    <a style="cursor: pointer" onclick="signOut()">
+                                        <span class="icon1"></span><span class="text">安全退出</span>
+                                    </a>
+                                </li>
+
+                            </ul>
+                        </div>
+
+                        <!-- memberInfo -->
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!--主框架top信息 结束-->
+        <!--主框架左侧菜单 开始-->
+        <div region="west" border="true" split="true" id="menu-1" class=" cs-west" style="height: 610px;">
+            <div class="lmenu fl" id="div_menulist">
+                <ul>
+                    <%--<li class="parentMenu" id='parent8'>
+                        <a onclick="GetSubMenu(this);return false;" id="11" index='8' style="cursor: pointer">
+                            <div class="cover"></div>
+                            <div class="icon">
+                                <img src='/Images/MenuImg/XTSZ.png' width="120" height="47" />
+                            </div>
+                            <div class="newFunction" style="display: none;" index="tfun2"></div>
+                            <div class="text" topname='系统设置' topvalue='8'>系统设置</div>
+                        </a>
+                    </li>--%>
+                </ul>
+            </div>
+            <div class="secondBottom"></div>
+        </div>
+
+        <!--主框架左侧菜单 结束-->
+        <!--主框架右侧工作区 开始-->
+        <div id="mainPanle" region="center" border="true" border="false">
+            <div id="tabs" class="easyui-tabs" fit="true" border="false">
+                <div title="Home">
+                    <div class="cs-home-remark">
+                        &nbsp;
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--主框架右侧工作区 结束-->
+        <div id="mm" class="easyui-menu cs-tab-menu">
+        </div>
+    </form>
+</body>
+</html>
+<script type="text/javascript">
+    //左侧菜单的显示和隐藏
+    function HiddenLeftMenu() {
+        if ($("#MenuOperate").val() == "1") {
+            $("div[class='panel layout-panel layout-panel-west layout-split-west']").animate({ width: "0px" }, 10).hide();
+            $("div[class='panel layout-panel layout-panel-center']").animate({ left: "0px" }, 10);
+            $("div[class='panel layout-panel layout-panel-center']").animate({ width: "1440px" }, 10);
+            $("#mainPanle").animate({ width: "1440px" }, 10);
+            $("#tabs").animate({ width: "1440px" }, 10);
+            $("div[class='tabs-header tabs-header-noborder']").animate({ width: "1440px" }, 10);
+            $("div[class='tabs-panels tabs-panels-noborder']").animate({ width: "1440px" }, 10);
+            $("div[class='tabs - wrap']").animate({ width: "1440px" }, 10);
+            $("div[class='panel-body panel-body-noheader panel-body-noborder']").animate({ width: "1440px" }, 10);
+            $("#downArrowID").animate({ left: "-=120px" }, 10);
+            $("#logoID").animate({ width: "-=120px" }, 10);
+            $("#MenuOperate").val("0");
+            $("#HiddenLeftMenu").text("显示菜单");
+            $("#IndexMenuPic").removeClass('shousuo').addClass('zhankai');
+        }
+        else {
+            $("div[class='panel layout-panel layout-panel-west layout-split-west']").animate({ width: "120px" }, 10).show();
+            $("div[class='panel layout-panel layout-panel-center']").animate({ left: "120px" }, 10);
+            $("div[class='panel-body panel-body-noheader panel-body-noborder']").animate({ width: "1320px" }, 10);
+            $("div[class='tabs - wrap']").animate({ width: "1320px" }, 10);
+            $("div[class='tabs-panels tabs-panels-noborder']").animate({ width: "1320px" }, 10);
+            $("div[class='tabs-header tabs-header-noborder']").animate({ width: "1320px" }, 10);
+            $("#tabs").animate({ width: "1320px" }, 10);
+            $("#mainPanle").animate({ width: "1320px" }, 10);
+            $("div[class='panel layout-panel layout-panel-center']").animate({ width: "1320px" }, 10);
+            $("#downArrowID").animate({ left: "+=120px" }, 10);
+            $("#logoID").animate({ width: "120px" }, 10);
+            $("#MenuOperate").val("1");
+            $("#HiddenLeftMenu").text("隐藏菜单");
+            $("#IndexMenuPic").removeClass('zhankai').addClass('shousuo');
+        }
+    }
+
+    //头部的显示和隐藏
+    function HiddenHeader() {
+        if ($("#MenuUp").val() == "1") {
+            $("div[class='panel layout-panel layout-panel-north']").animate({ height: "0px" }, 500);
+            $("#NorthRegion").animate({ height: "0px" }, 500);
+            $("#headerID").animate({ height: "0px" }, 500);
+            $("#lineOneID").animate({ height: "0px" }, 500);
+            $("#logoID").animate({ height: "0px" }, 500).hide();
+            $("#infoID").animate({ height: "0px" }, 500).hide();
+            $("#downArrowID").animate({ top: "0px" }, 500).show();
+            $("div[class='panel layout-panel layout-panel-west layout-split-west']").animate({ top: "0px" }, 500);
+            $("div[class='panel layout-panel layout-panel-center']").animate({ top: "0px" }, 500);
+            $("#logoNameDiv").animate({ height: "0px" }, 500).hide();
+            $("#MenuUp").val("0");
+            $("#HiddenHeader").text("显示头部");
+        }
+        else {
+            $("div[class='panel layout-panel layout-panel-west layout-split-west']").animate({ top: "47px" }, 10);
+            $("div[class='panel layout-panel layout-panel-center']").animate({ top: "47px" }, 10);
+            $("#downArrowID").animate({ top: "47px" }, 10).show();
+            $("#infoID").animate({ height: "47px" }, 10).show();
+            $("#logoID").animate({ height: "47px" }, 10).show();
+            $("#lineOneID").animate({ height: "47px" }, 10);
+            $("#headerID").animate({ height: "47px" }, 10);
+            $("#NorthRegion").animate({ height: "47px" }, 10);
+            $("div[class='panel layout-panel layout-panel-north']").animate({ height: "47px" }, 10).show();
+            $("#logoNameDiv").animate({ height: "120px" }, 10).show();
+            //$("#logoID").animate({ height: "67px" }, 400);
+            $("#MenuUp").val("1");
+            $("#HiddenHeader").text("隐藏头部");
+        }
+    }
+
+</script>

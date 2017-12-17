@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context" 
+	xmlns:jdbc="http://www.springframework.org/schema/jdbc"  
+	xmlns:jee="http://www.springframework.org/schema/jee" 
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:aop="http://www.springframework.org/schema/aop" 
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xmlns:jpa="http://www.springframework.org/schema/data/jpa"
+	xsi:schemaLocation="
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.2.xsd
+		http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc-3.2.xsd
+		http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee-3.2.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.2.xsd
+		http://www.springframework.org/schema/data/jpa http://www.springframework.org/schema/data/jpa/spring-jpa-1.3.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.2.xsd
+		http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.2.xsd
+		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.2.xsd">
+	
+	<!--开启组件扫描-->
+   <context:component-scan base-package="com.wcl"/>
+   <!--开启注解器
+   <context:annotation-config />-->
+   <mvc:annotation-driven />
+    <!-- 配置数据源 -->
+ <bean id="dataSource"  class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+  <property name="driverClassName" value="com.mysql.jdbc.Driver" />
+  <property name="url"  value="jdbc:mysql://localhost:3306/hibernate" />
+  <property name="username">
+   <value>root</value>
+  </property>
+  <property name="password">
+   <value>123</value>
+  </property>
+ </bean>
+ 
+ <!--配置SessionFactory -->
+ <bean id="sessionFactory"
+  class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+  <property name="dataSource" ref="dataSource" />
+  <property name="packagesToScan">
+   <list>
+    <value>com.wcl.entity</value>
+   </list>
+  </property>
+
+  <property name="hibernateProperties">
+   <props>
+    <prop key="hibernate.show_sql">true</prop>
+    <prop key="hibernate.dialect">org.hibernate.dialect.MySQLDialect</prop>
+   </props>
+  </property>
+ </bean>
+ 
+ 
+   <!-- 配置Hibernate事务管理器 -->
+    <bean id="transactionManager"
+        class="org.springframework.orm.hibernate4.HibernateTransactionManager">
+      <property name="sessionFactory" ref="sessionFactory" />
+   </bean>
+   
+  <tx:annotation-driven  transaction-manager="transactionManager" />  
+  
+  <!-- 将sessionFactory 注入到hibernateTemplate中 -->
+    <bean id="hibernateTemplate"
+        class="org.springframework.orm.hibernate4.HibernateTemplate">
+      <property name="sessionFactory" ref="sessionFactory" />
+   </bean>
+   
+   <!-- 配置事务异常封装 -->
+   <bean id="persistenceExceptionTranslationPostProcessor" 
+       class="org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor" />
+   
+   <!--  声明式容器事务管理 ,transaction-manager指定事务管理器为transactionManager -->
+	<tx:advice id="txAdvice" transaction-manager="transactionManager">
+		<tx:attributes>
+		     <tx:method name="*" propagation="REQUIRED" read-only="false"/>
+			<!-- <tx:method name="add*" propagation="REQUIRED" /> <tx:method name="get*" 
+				propagation="REQUIRED" /> <tx:method name="*" read-only="true" />
+			<tx:method name="get*" read-only="false" propagation="NOT_SUPPORTED" />
+			<tx:method name="find*" read-only="false" propagation="NOT_SUPPORTED" /> 
+			<tx:method name="save*" propagation="REQUIRED" />
+			<tx:method name="update*" propagation="REQUIRED" />
+			<tx:method name="delete*" propagation="REQUIRED" />-->
+			
+		</tx:attributes>
+	</tx:advice>
+
+
+  <aop:config>
+    <aop:pointcut id="DaoPointCut" expression="execution(* com.wcl.imp.*.*(..))" />
+    <aop:advisor advice-ref="txAdvice" pointcut-ref="DaoPointCut"/>
+</aop:config>
+    
+    
+    
+    
+    
+    
+    <!-- 基于spring mvc 完成请求和注解的pojo映射 -->
+     <bean class="org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping" />   
+     <!-- 启动 Spring MVC 的注解功能，完成请求和注解 POJO 的映射 -->   
+     <bean class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter">  
+         <property name="messageConverters">  
+           <list>   
+               <bean class="org.springframework.http.converter.StringHttpMessageConverter">   
+               </bean>   
+            </list>   
+         </property>   
+     </bean>  
+    
+    <!-- 配置视图解析 -->
+     <bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">  
+           <!--  <property name="prefix" value="/WEB-INF/jsp/"/>  --> 
+            <property name="suffix" value=".html"/>  
+        </bean>  
+ 
+
+ 
+ 
+
+</beans>

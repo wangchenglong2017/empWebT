@@ -1,0 +1,101 @@
+﻿.cs-north {
+    height: 47px;
+}
+
+.cs-north-bg {
+    width: 100%;
+    height: 100%;
+}
+
+.cs-north-logo {
+    height: 40px;
+    margin: 15px 0px 0px 5px;
+    display: inline-block;
+    color: #000000;
+    font-size: 22px;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.cs-west {
+    width: 120px;
+    padding: 0px;
+    background-color: #3a93d4;
+    overflow: hidden;
+}
+
+.cs-south {
+    height: 60px;
+    background: url('/Scripts/EasyUi/themes/images/ui-bg60x60.png') repeat-x;
+    padding: 0px;
+    text-align: center;
+}
+
+.cs-navi-tab {
+    /* padding: 5px;*/
+}
+
+.cs-tab-menu {
+    width: 120px;
+}
+
+.cs-home-remark {
+    /*padding: 10px;*/
+}
+
+.wrapper {
+    float: right;
+    height: 30px;
+    margin-left: 10px;
+}
+
+.ui-skin-nav {
+    float: right;
+    padding: 0;
+    margin-right: 10px;
+    list-style: none outside none;
+    height: 30px;
+}
+
+    .ui-skin-nav .li-skinitem {
+        float: left;
+        font-size: 12px;
+        line-height: 30px;
+        margin-left: 10px;
+        text-align: center;
+    }
+
+        .ui-skin-nav .li-skinitem span {
+            cursor: pointer;
+            width: 10px;
+            height: 10px;
+            display: inline-block;
+        }
+
+            .ui-skin-nav .li-skinitem span.cs-skin-on {
+                border: 1px solid #FFFFFF;
+            }
+
+            .ui-skin-nav .li-skinitem span.gray {
+                background-color: gray;
+            }
+
+            .ui-skin-nav .li-skinitem span.pepper-grindereeeeeeeee {
+                background-color: #BC3604;
+            }
+
+            .ui-skin-nav .li-skinitem span.blue {
+                background-color: blue;
+            }
+
+            .ui-skin-nav .li-skinitem span.cupertino {
+                background-color: #D7EBF9;
+            }
+
+            .ui-skin-nav .li-skinitem span.dark-hive {
+                background-color: black;
+            }
+
+            .ui-skin-nav .li-skinitem span.sunny {
+                background-color: #FFE57E;
+            }

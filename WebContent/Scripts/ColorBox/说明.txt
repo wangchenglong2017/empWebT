@@ -1,0 +1,132 @@
+﻿
+<link href="admin/colorbox.css" rel="stylesheet" type="text/css" />
+<script src="admin/jquery.colorbox.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+$(document).ready(function() {
+$("#atest").colorbox({ width: "600px", inline: true, href: "#blogrollSettings" });
+});
+</script>
+ 
+1 <h3>显示单张图片</h3>
+2 <a href="001.jpg" class="ab" title="image1">图片 1</a> <br>
+3 <a href="002.jpg" class="ab" title="image2">图片 2</a> <br>
+4 <a href="003.jpg" class="ab" title="image3">图片 3</a>
+5 <h3>显示图片组</h3>
+6 <a href="001.jpg" class="ac" rel="group1" title="image1">图片 1</a> <br>
+7 <a href="002.jpg" class="ac" rel="group1" title="image2">图片 2</a> <br>
+8 <a href="003.jpg" class="ac" rel="group1" title="image3">图片 3</a>
+9 <h3>显示图片组2</h3>
+10 <a href="001.jpg" class="ad" title="image1">图片 1</a> <br>
+11 <a href="002.jpg" class="ad" title="image2">图片 2</a> <br>
+12 <a href="003.jpg" class="ad" title="image3">图片 3</a>
+13 
+14 <h3>显示网页元素内容</h3>
+15 <a href="" class="ae">我的联系方式</a>
+16 
+17 <h3>能过 AJAX 加载另一个页面</h3>
+18 <a href="ajax.html" class="af">AJAX</a>
+19 
+20 <h3>通过 iframe 显示另一个页面</h3>
+21 <a href="http://www.google.com" class="ag">iframe</a>
+22 
+23 <div style="display:none">
+24 <div id="myContact">
+25 Hello, colorbox!!!
+26 </div>
+27 </div>
+复制代码
+
+复制代码
+1 /*显示单张图片：
+2 下面的代码通过样式选择器 ".ab" 选择了三个元素，但是这由于没有设置 rel 属性，所以 colorbox 只会显示第一张图片
+3 */
+4 $('.ab').colorbox();
+5 
+6 /*显示图片组：
+7 下面的代码通过样式选择器 ".ac" 选择了三个元素，这三个元素都设置了 rel 属性，并组值相同，colorbox 会
+8 把他们当成一个图片组来显示
+9 */
+10 $('.ac').colorbox(); 
+11 
+12 /*显示图片组：
+13 下面的代码通过样式选择器 ".ad" 选择了三个元素，这三个选择没有设置 rel 属性，但是程序为这些元素设置了
+14 rel 属性，所以 colorbox 也会把它们当成一个组来显示
+15 */
+16 $('.ad').colorbox({ rel: 'group2' });
+17 
+18 /*显示网页元素内容
+19 这里需要设置两个属性，一个是 inline, 必须设置为 true, 另一个就是 href 属性，需要把此属性设置为
+20 需要显示元素的 ID 号，并在此 ID 号前加 # 号
+21 */
+22 $('.ae').colorbox({ inline:true, href: '#myContact' });
+23 
+24 /*能过 AJAX 加载另一个页面
+25 通过 AJAX 加载另一个页面只需要设置 href 属性
+26 */
+27 $('.af').colorbox();
+28 
+29 /*通过 iframe 显示另一个页面
+30 在这里需要设置 iframe 属性为 ture, 并要设置窗口的宽和高
+31 */
+32 $('.ag').colorbox({ iframe:true, width:600, height:500 });
+复制代码 
+
+ //绑定汉和事件
+  $(document).ready(function(){           
+            $(".iframe").colorbox({iframe:true, width:"80%", height:"80%"});
+            $(".iframe").colorbox({
+                    onOpen:function(){ alert('onOpen: colorbox is about to open'); },
+                    onLoad:function(){ alert('onLoad: colorbox has started to load the targeted content'); },
+                    onComplete:function(){ alert('onComplete: colorbox has displayed the loaded content'); },
+                    onCleanup:function(){ alert('onCleanup: colorbox has begun the close process'); }
+                    onClosed:function(){ alert('關閉窗口'); window.location='Index.aspx';} //關閉時的狀態//注：塗聚文
+                    });
+             
+            $(".callbacks").colorbox({
+                    onOpen:function(){ alert('onOpen: colorbox is about to open'); },
+                    onLoad:function(){ alert('onLoad: colorbox has started to load the targeted content'); },
+                    onComplete:function(){ alert('onComplete: colorbox has displayed the loaded content'); },
+                    onCleanup:function(){ alert('onCleanup: colorbox has begun the close process'); },
+                    onClosed:function(){ alert('onClosed: colorbox has completely closed'); } //關閉時的狀態
+                });
+ 
+            $("#click").click(function(){ 
+                    $('#click').css({"background-color":"#f00", "color":"#fff", "cursor":"inherit"}).text("Open this window again and this message will still be here.");
+                    return false;
+            });
+           
+});
+
+
+
+Usage
+ColorBox accepts settings from an object of key/value pairs, and can be assigned to any HTML element.
+
+
+// Format:
+$(selector).colorbox({key:value, key:value, key:value});
+
+// Examples:
+// Image links displayed as a group
+$('a.gallery').colorbox({rel:'gal'});
+ 
+// Ajax
+$('a#login').colorbox();
+ 
+// Called directly, without assignment to an element:
+$.colorbox({href:"thankyou.html"});
+ 
+// Called directly with HTML
+$.colorbox({html:"<h1>Welcome</h1>"});
+ 
+// ColorBox can accept a function in place of a static value:
+$("a.gallery").colorbox({rel: 'gal', title: function(){
+    var url = $(this).attr('href');
+    return '<a href="' + url + '" target="_blank">Open In New Window</a>';
+}});
+ 
+
+
+ 
+ 

@@ -1,0 +1,12 @@
+﻿#pagerleft{ float:left; padding-top:15px;}
+#pagerleft .hot{ color:#f60;}
+#pagerrigt{ float:right; padding-top:10px;}
+#pagerrigt span{float:left;}
+#pagerrigt .current{ padding:4px 8px;border:1px solid #dbdbdd; margin-right:5px; color:#dbdbdd; border-radius:3px;}
+#pagerrigt a{text-decoration:none; color:#0041d9; display:block; float:left; padding:4px 8px;border:1px solid #ccdbe4; margin-right:5px;border-radius:3px;}
+#pagerrigt a:hover{ background:#217ae3; color:#fff; border:1px solid #035bc3;}
+.tz{margin:1px 7px;}
+.tz input{border:1px solid #ccdbe4; height:20px; line-height:20px; width:26px; margin-bottom:2px;border-radius:3px;}
+#pagerrigt a.go{background:#217ae3; color:#fff; border:1px solid #035bc3; padding:4px 6px; font-weight:bold;border-radius:3px;}
+
+

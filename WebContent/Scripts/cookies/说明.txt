@@ -1,0 +1,13 @@
+ jQuery的Cookie插件 cookies
+
+cookies 是一个强大的 jQuery 用来操作 Cookie 的插件。除了常见的操作
+
+$.cookies.set( 'sessid', 'dh3tr62fghe' );
+
+var sessid = $.cookies.get( 'sessid' );
+
+$.cookies.del( 'sessid' );
+
+if( $.cookies.test() ) //测试浏览器是否启用了cookie
+
+外，该插件还支持存放 JSON 数据，已经直接将某个输入框映射到cookie中，例如 $( 'input.store' ).cookify(); 使用相当的方便。

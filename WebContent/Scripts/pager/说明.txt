@@ -1,0 +1,23 @@
+   //分页函数
+function SetPage() {
+    //加载数据
+    LoadItemList(1);
+    //第一次加载数据 
+    $("#Pagination").pagination($("#hdnTotalRow").val(), {
+        callback: pageselectCallback, //PageCallback() 为翻页调用次函数。
+        first_text: "首页",
+        prev_text: "上一页",
+        next_text: "下一页",
+        last_text: "尾页",
+        jump_text: "GO",
+        jump_format_text: "请输入数字!",
+        jump_outofrange_text: "已超出页数范围！",
+        jump_null_text: "不允许为空",
+        isSum: true,
+        isJump: true,
+        link_to: "javascript:void(0)",
+        items_per_page: 10, // pagesize:每页的数据个数
+        num_display_entries: 4, //两侧首尾分页条目数
+        current_page: 0,   //page:当前页码
+        num_edge_entries: 0 //连续分页主体部分分页条目数
+    });

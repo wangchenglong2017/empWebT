@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=gbk" />
+    <title>人员模型登录</title>
+    <link href="CSS/login.css" rel="stylesheet" />
+    <link href="Scripts/alert/css/jquery.alert.css" rel="stylesheet" type="text/css" />
+    <script src="Scripts/jquery-1.9.1.min.js" type="text/javascript"></script>
+    <script src="Scripts/alert/jquery.alert.js" type="text/javascript"></script>
+    <script src="Scripts/Common.js"></script>
+    <script src="Scripts/cookie_util.js"></script>
+    <script type="text/javascript">
+        $(function () {
+            // 捕获页面回车事件，视为单击“确定”按钮
+            document.onkeydown = function (event_e) {
+                if (window.event)
+                    event_e = window.event;
+
+                var int_keycode = event_e.charCode || event_e.keyCode;
+
+                if (13 == int_keycode)
+                    $("#btnlogin").click();
+            }
+
+            $("#btnlogin").unbind("click").bind("click", function () {
+                CheckLogin();
+            })
+        })
+        
+        function CheckLogin() {            
+            var username = $("#txtEmName").val();
+            var password = $("#txtEmPwd").val();
+            var txt_verify = $("#txtverify").val().toUpperCase();
+            
+            if (username == null || username.length == 0 || username == "请输入登录帐号") {
+                $("#txtEmName").alert('请输入登录帐号！', { alertClass: 'corner', focus: true, position: 'top' });
+                return false;
+            }
+            if (password == null || password.length == 0 || password == "请输入登录密码") {
+                $("#txtEmPwd").alert('请输入登录密码！', { alertClass: 'corner', position: 'top' });
+                return false;
+            }
+           
+               $.ajax({
+            	   type : "GET",
+                   url : "http://localhost:8080/empWebT/user/login.do",
+                   data:{"username":username,"password":password},
+                   dataType : "json",
+                   success:function(util){
+                	   var username=util.data.userLogin;
+                	   addCookie("userName",username,2);
+                	 
+                	   window.location.href="index.html";
+                   }
+               });
+        }
+          
+               
+    </script>
+</head>
+<body>
+    <div class="wrapper">
+        <!--head-->
+        <div class="login_head">
+            <div class="logo">
+                <a>
+                    <img src="Images/hhLogo.png" /><b class="logoName">人员模型</b>
+                </a>
+            </div>
+            <div class="loginTip">
+
+            </div>
+        </div>
+        <!--content pwdInput_focus-->
+        <div class="login">
+            <div class="login_content">
+                <div class="login_area">
+                    <div class="form">
+                        <div style="display: none;">
+                            <input data-val="true" id="RemusrNamePhone" name="RemusrNamePhone"
+                                   type="checkbox" value="true" /><input name="RemusrNamePhone" type="hidden" value="false" />
+                        </div>
+                        <p>
+                            <strong>欢迎登录</strong>
+                        </p>
+                        <div class="textInput" id="txtdivUsername">
+                            <input type="text"  id="txtEmName" value="请输入登录帐号"
+                                   class="username textGray" onfocus="$('#txtdivUsername').addClass('textInput_focus');if(value=='请输入登录帐号'){value='';}" onblur="$('#txtdivUsername').removeClass('textInput_focus');if($.trim(value)==''){value='请输入登录帐号';}" />
+                        </div>
+                        <div class="pwdInput" id="txtdivPassword">
+                            <input type="password" id="txtEmPwd" value=""
+                                   style="width: 215px" class="userpwd textGray" onfocus="$('#txtdivPassword').removeClass('pwdInput').addClass('pwdInput_focus');"
+                                   onblur="$('#txtdivPassword').removeClass('pwdInput_focus').addClass('pwdInput');" />
+                        </div>
+                        <div class="verifyInput">
+                            <input type="text" id="txtverify" class="userVerify textGray" value="请输入验证码" onfocus="if(value=='请输入验证码'){value='';}"
+                                   onblur="if($.trim(value)==''){value='请输入验证码';}" /><a href="#">
+                                <span class="yanzheng"
+                                      id="checkCode" onclick="createCode();"></span>
+                            </a>
+                        </div>
+                        <div class="login_btn" id="btnlogin" style="text-align: center">
+                            <a href="javascript:void(0)">登&nbsp;&nbsp;录</a>
+                        </div>
+                        <asp:Label runat="server" ID="lblServiceState"></asp:Label>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="footer" style="border-top: none;">
+            <p class="f1">
+            </p>
+            <p>
+                <asp:Literal ID="LitCopyRight" runat="server"></asp:Literal>
+            </p>
+        </div>
+    </div>
+</body>
+</html>

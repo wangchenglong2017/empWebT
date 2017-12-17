@@ -1,0 +1,52 @@
+﻿@charset "utf-8";
+* {margin:0; padding:0;}
+body{ font-size:12px;font-family:Arial, '微软雅黑';color:#333;}
+.wrapper{ margin:0 auto;}
+.logo a img{ float:left; margin-top:5px;border:none}
+.logoName{ height:80px; line-height:80px; float:left; font-size:26px; font-family:inherit;color:#000; margin-left:10px;text-shadow:1px 1px 2px rgba(0, 0, 0, 0.4); font-weight:normal;}
+.logo{ height:80px; margin:0px 5px; float:left;clear:both;}
+/*用户登录页面*/
+.login{ background:url(../Images/loginBanner.png) no-repeat; margin-bottom:5px; height:530px; border-top:3px solid #0566DC; min-width:1300px;}
+.login_head{ width:1100px; margin:5px auto; overflow:auto;}
+.loginTip{ float:right; margin-top:30px;}
+.loginTip a{ display:inline-block; text-decoration:none; height:40px; line-height:40px; color:#A5A5A5; font-size:14px; font-weight:bold;padding-left:45px; margin-right:10px;}
+.loginTip a:hover{ color:#1c7efb;}
+.loginTip .ghome{ background:url(../Images/index.png) no-repeat left center;}
+.loginTip .ghome:hover{ background:url(../Images/index1.png) no-repeat left center;}
+.loginTip .weibo{ background:url(../Images/weibo.png) no-repeat left center;}
+.loginTip .weibo:hover{ background:url(../Images/weibo1.png) no-repeat left center;}
+.login_content{width:315px; float:right; margin:80px 80px 0 0;border: 1px solid #dadada;background: #fff;-webkit-box-shadow: 0px 0px 3px #C2C2C2;box-shadow: 0px 0px 3px #C2C2C2;opacity:0.9;}
+.login_area{ padding:30px; height:290px;}
+.login_ad{ margin-top:30px; float:left;}
+.login_ad img{ border:none;}
+.form{ float:right; width:255px;}
+.form div{ margin-bottom:20px;}
+.form p{ padding:15px 0 20px 0; line-height:20px;}
+.form p strong{font-size: 16px !important; font-family:"微软雅黑"; font-weight:normal;}
+/*用户名*/
+.textInput{border:1px solid #dadada; width:215px; height:34px; padding:0 0 0 34px;outline:none;background:url(../Images/user1.png) no-repeat 0px 2px;}
+.textInput_focus{background:url(../Images/user2.png) no-repeat 0px 2px;border:1px solid #6cb8df; box-shadow:0 0 1px 1px #7fcaf1;}
+.textInput input{border:0;outline:none; float:left;height:14px;padding:10px 0 10px 0; width:215px;}
+.textInput_focus input{border:0;outline:none;height:14px;padding:10px 0 10px 0;}
+/*密码*/
+.pwdInput{border:1px solid #dadada; width:215px; height:34px;padding:0 0 0 34px;background:url(../Images/pwd1.png) no-repeat;outline:none;}
+.pwdInput_focus{ background:url(../Images/pwd2.png) no-repeat;border:1px solid #6cb8df; box-shadow:0 0 1px 1px #7fcaf1;width:215px;height:34px;padding:0 0 0 34px; outline:none;}
+.pwdInput input{ border:0;outline:none; float:left;height:14px;padding:10px 0 10px 0px;}
+.pwdInput_focus input{ border:0;outline:none; background:none; float:left;height:14px;padding:10px 0 10px 0px;}
+/*验证码*/
+.verifyInput .userVerify{border:1px solid #dadada;height:14px;padding:10px 0 10px 0px;vertical-align: middle;outline:none;width:160px; padding-left:5px; float:left;}
+.verifyInput .userVerify:focus{ padding-left:5px;border:1px solid #6cb8df; box-shadow:0 0 1px 1px #7fcaf1;}
+.verifyInput .yanzheng{background:#D0C7D8; color:#0001F4; height:36px; line-height:36px;cursor:pointer;padding:0 8px;font-size:20px; font-weight:bold; margin-left:5px; /*margin-right:5px; */display:inline-block; text-decoration:none;}
+.textGray{ color:#999;}
+.textNormal{ color:#333;}
+
+.off{background-image: url(../Images/loginPassword.png);width: 62px;height: 21px;float: right;margin-right: 3px; margin-top:6px;}
+.on{background-image: url(../images/loginPassword.png);background-position: 0 -21px;width: 62px;height: 21px;float: right;margin-right: 3px;margin-top:6px;}
+/*.auto_login{ clear:both;}
+.auto_login input{display: inline-block;vertical-align: middle; height:12px; width:12px; border:none;}
+.auto_login a{ text-decoration:none; float:right; color:#08c;}
+.auto_login a:hover{ text-decoration:underline;}*/
+.login_btn a{text-decoration: none;background:#1B64D1;display: block;margin: 14px 0 0 0; height:40px; line-height:40px; vertical-align:middle; color:#fff;  border-radius:2px;font-size: 18px !important; font-family:"微软雅黑"; font-weight:bold}
+.login_btn a:hover{ background:#4A89E8;}
+.textInput .yanzheng{background:#D0C7D8; color:#0001F4; height:36px; line-height:36px; padding:0 8px;font-size:20px; font-weight:bold; margin-left:5px; /*margin-right:5px; */display:inline-block; text-decoration:none;}
+ 
