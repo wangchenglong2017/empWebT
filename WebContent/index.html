@@ -32,8 +32,17 @@
         });
         
         <!--通过用户名和角色id获取用户的一级菜单-->
-        
-        
+        $(function(){
+        	$.ajax({
+        		type:"GET",
+        		url:"http://localhost:8080/empWebT/user/Checklogin.do",
+        		data:{"roleid":roleid,"username":username},
+        		dataType:"json",
+        		success:function(util){
+        			
+        		}
+        	});
+        });
         
         
         
