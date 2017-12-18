@@ -5,14 +5,15 @@ import javax.transaction.Transactional;
 
 import org.springframework.stereotype.Service;
 
+import com.wcl.dao.RoleFindMenuDao;
 import com.wcl.entity.Util;
 import com.wcl.ser.RoleFndMenuService;
 
 @Service
-public class RoleFndMenuImp implements RoleFndMenuService {
+public class RoleFndMenuServiceImp implements RoleFndMenuService {
 	
 	@Resource
-	private RoleFindMenuDao  RoleFindMenuDao;
+	private RoleFindMenuDao  roleFindMenuDao;
 	
 	@Transactional
 	@Override

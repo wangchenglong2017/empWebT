@@ -18,7 +18,7 @@ public class RoleFindMenuDaoImp implements RoleFindMenuDao {
 
 	@Override
 	public List<Menu> findFirstMenu(String roleid, String username) {
-		this.hibernateTamplate.find(queryString, values)
+//		this.hibernateTamplate.find(queryString, values)
 		return null;
 	}
 
