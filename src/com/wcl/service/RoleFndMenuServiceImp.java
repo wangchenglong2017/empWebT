@@ -11,6 +11,9 @@ import com.wcl.ser.RoleFndMenuService;
 
 @Service
 public class RoleFndMenuServiceImp implements RoleFndMenuService {
+	/*
+	 *选择一级二级菜单
+	 */
 	
 	@Resource
 	private RoleFindMenuDao  roleFindMenuDao;
