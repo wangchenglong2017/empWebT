@@ -46,7 +46,7 @@ public class RoleFindMenuDaoImp implements RoleFindMenuDao {
 	@Override
 	public List<Menu> findSecondMenu(String roleid, String username,
 			String menuParentCode) {
-		// TODO Auto-generated method stub
+		// TODO Auto-generated method s。。。。
 		return null;
 	}
 
