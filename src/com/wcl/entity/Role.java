@@ -14,6 +14,8 @@ public class Role {
 	private String  creator;
 	private String  creatorName;
 	private Date creatorDate;
+	
+	
 	public String getGuid() {
 		return guid;
 	}

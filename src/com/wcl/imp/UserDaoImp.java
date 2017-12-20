@@ -48,14 +48,6 @@ public class UserDaoImp implements UserDao {
 	//检查用户的部门和角色
 	@Override
 	public RoleUser CheckLogin(String username) {
-		//sql select c.* from tn_sys_user  a  join tn_sys_orguser b on a.CN_S_LOGIN=b.CN_S_LOGIN join 
-		//tn_sys_roleuser c on  a.CN_S_LOGIN=c.CN_S_LOGIN  where  a.CN_S_LOGIN='lisi';
-		
-		//from User  a  join OrgUser b on a.CN_S_LOGIN=b.CN_S_LOGIN join RoleUser c on  a.CN_S_LOGIN=c.CN_S_LOGIN  where  a.CN_S_LOGIN='lisi';
-		//List<User> users= (List<User>) this.hibernateTamplate.find("from User  a  join OrgUser b on a.CN_S_LOGIN=b.CN_S_LOGIN join RoleUser c on  a.CN_S_LOGIN=c.CN_S_LOGIN  where  a.CN_S_LOGIN='"+username+"'");
-//		String sql = "select c.roleguid "
-//				+ "from User a  join OrgUser b on a.userLogin=b.username join RoleUser c on  a.userLogin=c.username  where  a.userLogin="
-//				+ username;
 		String sql = "select c.roleguid "
 				+ "from User a, OrgUser b,RoleUser c where a.userLogin=b.username and a.userLogin=c.username   and a.userLogin='"
 				+ username+"'";

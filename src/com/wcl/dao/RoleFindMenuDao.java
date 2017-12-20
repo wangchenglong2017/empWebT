@@ -6,7 +6,7 @@ import com.wcl.entity.Menu;
 
 public interface RoleFindMenuDao {
 	
-	public List<Menu> findFirstMenu(String roleid, String username);
+	public List<Menu> findFirstMenu(String roleid);
 	
 	public List<Menu> findSecondMenu(String roleid, String username,String menuParentCode);
 

@@ -16,9 +16,9 @@ public class RoleFindMenu {
 	private RoleFndMenuService roleFindMenuService;
 	@RequestMapping("/firstMenu")
 	@ResponseBody
-	public Util findFirstMenu(String roleid,String username){
-		Util util=roleFindMenuService.findFistMenu(roleid, username);
-		return null;
+	public Util findFirstMenu(String roleid){
+		Util util=roleFindMenuService.findFistMenu(roleid);
+		return util;
 	}
 
 	

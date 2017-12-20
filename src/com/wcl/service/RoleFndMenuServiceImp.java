@@ -1,11 +1,14 @@
 package com.wcl.service;
 
+import java.util.List;
+
 import javax.annotation.Resource;
 import javax.transaction.Transactional;
 
 import org.springframework.stereotype.Service;
 
 import com.wcl.dao.RoleFindMenuDao;
+import com.wcl.entity.Menu;
 import com.wcl.entity.Util;
 import com.wcl.ser.RoleFndMenuService;
 
@@ -20,9 +23,13 @@ public class RoleFndMenuServiceImp implements RoleFndMenuService {
 	
 	@Transactional
 	@Override
-	public Util findFistMenu(String roleid, String username) {
-		// TODO Auto-generated method stub
-		return null;
+	public Util findFistMenu(String roleid) {
+		List<Menu> menuList=this.roleFindMenuDao.findFirstMenu(roleid);
+		Util util=new Util();
+		util.setCode(0);
+		util.setData(menuList);
+		util.setMsg("获取数据");
+		return util;
 	}
 	@Transactional
 	@Override
