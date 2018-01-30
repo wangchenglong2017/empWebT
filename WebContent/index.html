@@ -35,10 +35,24 @@
         $(function(){
         	$.ajax({
         		type:"GET",
-        		url:"http://localhost:8080/empWebT/user/Checklogin.do",
+        		url:"http://localhost:8080/empWebT/rolelogin/firstMenu.do",
         		data:{"roleid":roleid},
         		dataType:"json",
         		success:function(util){
+        			
+        			
+        			 for (var i = 0; i < menuList.length; i++) {
+                         var icon = "&" + $.trim(menuList[i].iconSkin);
+
+                         html += "<li class='parentMenu' id='parent8'>";
+                         html += "<a onclick=\"GetSubMenu(this);return false;\" id='" + menuList[i].id + "' index='" + i + "' name='" + menuList[i].name + "' style='cursor: pointer'>";
+                         html += "<div class='cover'></div><div class='icon iconfont' style='color:#fff;text-align:center;font-size:35px'>" + icon + "</div>";
+                         html += "<div class='newFunction' style='display: none;' index='tfun2'></div>";
+                         html += "<div class='text' topname='" + menuList[i].name + "' topvalue='8'>" + menuList[i].name + "</div>";
+                         html += " </a> </li>";
+                     }
+                     $("#div_menulist>ul").append(html);
+        			
         			
         		}
         	});
@@ -606,17 +620,7 @@
                     var html = "";
                     $("#div_menulist>ul").empty();
                     var menuList = data.UserMenuList;
-                    for (var i = 0; i < menuList.length; i++) {
-                        var icon = "&" + $.trim(menuList[i].iconSkin);
-
-                        html += "<li class='parentMenu' id='parent8'>";
-                        html += "<a onclick=\"GetSubMenu(this);return false;\" id='" + menuList[i].id + "' index='" + i + "' name='" + menuList[i].name + "' style='cursor: pointer'>";
-                        html += "<div class='cover'></div><div class='icon iconfont' style='color:#fff;text-align:center;font-size:35px'>" + icon + "</div>";
-                        html += "<div class='newFunction' style='display: none;' index='tfun2'></div>";
-                        html += "<div class='text' topname='" + menuList[i].name + "' topvalue='8'>" + menuList[i].name + "</div>";
-                        html += " </a> </li>";
-                    }
-                    $("#div_menulist>ul").append(html);
+                   
                 }
             }
         }

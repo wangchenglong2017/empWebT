@@ -14,7 +14,7 @@ import com.wcl.ser.RoleFndMenuService;
 public class RoleFindMenu {
 	@Resource
 	private RoleFndMenuService roleFindMenuService;
-	@RequestMapping("/firstMenu")
+	@RequestMapping("/firstMenu.do")
 	@ResponseBody
 	public Util findFirstMenu(String roleid){
 		Util util=roleFindMenuService.findFistMenu(roleid);
