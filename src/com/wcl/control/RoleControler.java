@@ -42,7 +42,7 @@ public class RoleControler {
 	@RequestMapping("/show.do")
 	@ResponseBody
 	public Util showRole(String rolecode,String RoleName,String AppCodeSelect){
-		List roles=(List)this.roleServiceImp.findRole(rolecode,RoleName, AppCodeSelect);
+		List roles=this.roleServiceImp.findRole(rolecode,RoleName, AppCodeSelect);
 		Util util=new Util();
 		return util;
 	}

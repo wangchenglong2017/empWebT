@@ -1,9 +1,11 @@
 package com.wcl.dao;
 
+import java.util.List;
+
 public interface RoleDao {
 	public void addRole();
 	public void deleteRole();
 	public void updateRole();
-	public void findRole(String rolecode, String roleName, String appCodeSelect);
+	public List findRole(String rolecode, String roleName, String appCodeSelect);
 
 }

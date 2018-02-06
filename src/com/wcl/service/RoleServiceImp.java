@@ -30,7 +30,7 @@ public class RoleServiceImp implements RoleServices{
 		
 	}
 
-	public void findRole(String rolecode, String roleName, String appCodeSelect) {
+	public List findRole(String rolecode, String roleName, String appCodeSelect) {
 		if(rolecode==null) 
 			rolecode="";
 		if(roleName==null){
@@ -39,7 +39,9 @@ public class RoleServiceImp implements RoleServices{
 		if(appCodeSelect==null){
 			appCodeSelect="";
 		}
-		List(Role) roles=List(Role)this.roleDao.findRole(rolecode, roleName, appCodeSelect);
+		List roles=this.roleDao.findRole(rolecode, roleName, appCodeSelect);
+		
+		return roles;
 		
 	}
 

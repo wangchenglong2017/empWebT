@@ -40,11 +40,12 @@ public class RoleDaoImp implements RoleDao{
      * 角色管理中通过角色编码、角色名称和应用编号查询，当三个条件均为空时是默认加载列表
      */
 	@Override
-	public void findRole(String rolecode, String roleName, String appCodeSelect) {
+	public List findRole(String rolecode, String roleName, String appCodeSelect) {
 		// TODO Auto-generated method stub
 		List roles= this.hibernateTamplate.getSessionFactory().getCurrentSession()
 			.createCriteria(Role.class).add(Restrictions.like("", rolecode)).add(Restrictions.like("", roleName))
 			.add(Restrictions.like("", appCodeSelect)).list();
+		return roles;
 	}
 
 }
