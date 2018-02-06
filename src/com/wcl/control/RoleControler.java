@@ -1,5 +1,7 @@
 package com.wcl.control;
 
+import java.util.List;
+
 import org.hibernate.annotations.Source;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -40,8 +42,9 @@ public class RoleControler {
 	@RequestMapping("/show.do")
 	@ResponseBody
 	public Util showRole(String rolecode,String RoleName,String AppCodeSelect){
-		this.roleServiceImp.findRole(rolecode,RoleName, AppCodeSelect);
-		return null;
+		List roles=(List)this.roleServiceImp.findRole(rolecode,RoleName, AppCodeSelect);
+		Util util=new Util();
+		return util;
 	}
 	
 	
