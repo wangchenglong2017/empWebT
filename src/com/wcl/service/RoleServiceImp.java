@@ -4,9 +4,11 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
+import org.springframework.stereotype.Service;
+
 import com.wcl.dao.RoleDao;
 import com.wcl.ser.RoleServices;
-
+@Service
 public class RoleServiceImp implements RoleServices{
 	
 	@Resource
@@ -31,16 +33,7 @@ public class RoleServiceImp implements RoleServices{
 	}
 
 	public List findRole(String rolecode, String roleName, String appCodeSelect) {
-		if(rolecode==null) 
-			rolecode="";
-		if(roleName==null){
-			roleName="";
-		}
-		if(appCodeSelect==null){
-			appCodeSelect="";
-		}
 		List roles=this.roleDao.findRole(rolecode, roleName, appCodeSelect);
-		
 		return roles;
 		
 	}

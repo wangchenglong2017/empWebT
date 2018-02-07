@@ -2,19 +2,22 @@ package com.wcl.control;
 
 import java.util.List;
 
-import org.hibernate.annotations.Source;
+import javax.annotation.Resource;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.wcl.entity.Role;
 import com.wcl.entity.Util;
+import com.wcl.ser.RoleServices;
 import com.wcl.service.RoleServiceImp;
 
 @Controller
 @RequestMapping("/Role")
 public class RoleControler {
-	@Source
-	private RoleServiceImp roleServiceImp;
+	@Resource
+	private RoleServices roleServices;
 	
 	@RequestMapping("/add.do")
 	@ResponseBody
@@ -41,8 +44,9 @@ public class RoleControler {
 	
 	@RequestMapping("/show.do")
 	@ResponseBody
-	public Util showRole(String rolecode,String RoleName,String AppCodeSelect){
-		List roles=this.roleServiceImp.findRole(rolecode,RoleName, AppCodeSelect);
+	public Util showRole(String rolecode,String roleName,String appCodeSelect){
+//		System.out.print(rolecode+"---"+roleName+"---"+appCodeSelect);
+		List<Role> roles=this.roleServices.findRole(rolecode,roleName, appCodeSelect);
 		Util util=new Util();
 		return util;
 	}

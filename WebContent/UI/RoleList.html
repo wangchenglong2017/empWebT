@@ -35,14 +35,23 @@
           //加载角色列表
           function ListRole(){
         	  var rolecode= $("#txt_RoleCode").val();
-        	  var RoleName= $("#txt_RoleName").val();
-        	  var AppCodeSelect=$("#Text_AppCodeSelect").val();
+        	  if(rolecode.length==0){
+        		  rolecode="";
+        	  }
+        	  var roleName= $("#txt_RoleName").val();
+        	  if(roleName.length==0){
+        		  roleName="";
+        	  }
+        	  var appCodeSelect=$("#Text_AppCodeSelect").val();
+        	  if("请选择"==appCodeSelect){
+        		  appCodeSelect="";
+        	  }
         	  
         	  $.ajax({
         		  type:"GET",
         		  url:"http://localhost:8080/empWebT/Role/show.do",
         		  dataTytpe:"json",
-        		  data:{"rolecode":rolecode,"RoleName":RoleName,"AppCodeSelect":AppCodeSelect},
+        		  data:{"rolecode":rolecode,"roleName":roleName,"appCodeSelect":appCodeSelect},
         	      success: function(){
         	    	  
         	      }
